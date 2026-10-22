@@ -1,0 +1,755 @@
+/* ==========================================================================
+   FOCUSLAB — Optical Liquid Glass & Deep Oval Geometry Stylesheet
+   VisionOS-inspired Optical Refraction, Translucent Glass Lens & High-FPS Engine
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --primary: #38bdf8;
+  --primary-glow: rgba(56, 189, 248, 0.2);
+  --bg-main: #08090c;
+  --card-border: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(14, 17, 26, 0.55); /* Crystal clear optical transparency */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --panel-radius: 36px;
+  --card-radius: 24px;
+  
+  /* Optical Liquid Glass Shader: Multi-stop specular highlight & chromatic edge dispersion */
+  --liquid-glass-shadow: 
+    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.4),
+    inset 1.5px 0 1.5px 0 rgba(56, 189, 248, 0.35), /* subtle cyan dispersion on left */
+    inset -1.5px 0 1.5px 0 rgba(244, 63, 94, 0.28), /* subtle red/pink dispersion on right */
+    0 22px 48px -12px rgba(0, 0, 0, 0.65);
+}
+
+/* Light Mode: Pristine frosted crystal, high-contrast dark text */
+body.theme-light {
+  --primary: #0284c7;
+  --primary-glow: rgba(2, 132, 199, 0.15);
+  --bg-main: #f4f6fa;
+  --card-border: rgba(0, 0, 0, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --liquid-glass-shadow: 
+    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 1.5px 0 rgba(0, 0, 0, 0.06),
+    inset 1.5px 0 1.5px 0 rgba(56, 189, 248, 0.25),
+    inset -1.5px 0 1.5px 0 rgba(244, 63, 94, 0.18),
+    0 16px 36px -10px rgba(0, 0, 0, 0.07);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  transition: background-color 0.3s ease, color 0.25s ease;
+  font-size: 13px;
+  font-weight: 400;
+  contain: layout style;
+}
+
+/* Light Mode Global Text Contrast Tokens */
+body.theme-light,
+body.theme-light h1,
+body.theme-light h2,
+body.theme-light h3,
+body.theme-light h4,
+body.theme-light h5,
+body.theme-light h6,
+body.theme-light .text-white,
+body.theme-light [class*="text-slate-100"],
+body.theme-light [class*="text-slate-200"] {
+  color: #0f172a !important;
+}
+
+body.theme-light .text-slate-300,
+body.theme-light .text-slate-400 {
+  color: #475569 !important;
+}
+
+body.theme-light .text-slate-500 {
+  color: #64748b !important;
+}
+
+body.theme-light .bg-white\/5,
+body.theme-light .bg-white\/10,
+body.theme-light .bg-white\/\[0\.02\],
+body.theme-light .bg-white\/\[0\.03\] {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+body.theme-light .border-white\/5,
+body.theme-light .border-white\/10,
+body.theme-light .border-white\/15,
+body.theme-light .border-white\/20 {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+body.theme-light .bg-black\/40,
+body.theme-light .bg-black\/50,
+body.theme-light .bg-black\/60,
+body.theme-light .bg-black\/75 {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+}
+
+/* ==========================================================================
+   TOP HEADER & FLOATING OVAL NAV CAPSULE
+   ========================================================================== */
+.app-header {
+  background: transparent !important;
+  border-bottom: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  pointer-events: none;
+}
+
+.app-header > div {
+  pointer-events: auto;
+}
+
+/* Optical Liquid Glass Navigation Island */
+.nav-pill-container {
+  background: var(--glass-bg);
+  backdrop-filter: blur(28px) saturate(210%) contrast(106%);
+  -webkit-backdrop-filter: blur(28px) saturate(210%) contrast(106%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+  box-shadow: var(--liquid-glass-shadow);
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, 0, 0);
+}
+
+.nav-tab-pill {
+  padding: 0.45rem 1.15rem;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.nav-tab-pill:hover {
+  color: var(--text-main);
+}
+.nav-tab-pill.active-tab {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--text-main);
+  font-weight: 600;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.35);
+}
+body.theme-light .nav-tab-pill.active-tab {
+  background: rgba(0, 0, 0, 0.08);
+  color: #0f172a;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06);
+}
+
+/* Focuslab Minimal Halo Icon */
+.focuslab-halo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+.focuslab-halo-icon:hover {
+  transform: scale(1.05);
+}
+
+.focuslab-halo-ring {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+/* ==========================================================================
+   TOP NOTCH (Hides smoothly on scroll so it never covers content)
+   ========================================================================== */
+.liquid-island {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 60;
+  background: var(--glass-bg);
+  backdrop-filter: blur(32px) saturate(210%);
+  -webkit-backdrop-filter: blur(32px) saturate(210%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+  box-shadow: var(--liquid-glass-shadow);
+  padding: 6px 18px;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+  max-width: 95vw;
+}
+
+.liquid-island.scrolled-hidden {
+  transform: translate(-50%, -70px) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ==========================================================================
+   TRUE LIQUID GLASS PANELS (Optical Refraction Sheen & Transparent Depth)
+   ========================================================================== */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(28px) saturate(200%) contrast(105%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%) contrast(105%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--liquid-glass-shadow);
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s;
+  position: relative;
+  transform: translate3d(0, 0, 0);
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+body.theme-light .glass-panel:hover {
+  border-color: rgba(0, 0, 0, 0.16);
+}
+
+/* Subtle Specular Top Sheen */
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
+  border-radius: var(--panel-radius) var(--panel-radius) 0 0;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   TASK CARDS (Mat Koyu Renk, Gradyansız, İnce Beyaz Stroke, LEDsiz, Reorderable)
+   ========================================================================== */
+.tasks-fluid-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding-bottom: 4rem;
+}
+
+.task-fluid-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: var(--card-radius);
+  padding: 1.35rem;
+  min-width: 240px;
+  min-height: 125px;
+  /* Flat deep dark surface without gradient or neon glow */
+  background: #0d0f15;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 14px 32px -10px rgba(0, 0, 0, 0.65);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s;
+  cursor: grab;
+  user-select: none;
+  will-change: transform, width, height;
+}
+
+.task-fluid-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.task-fluid-card:active {
+  cursor: grabbing;
+}
+
+.task-fluid-card.dragging {
+  opacity: 0.45;
+  transform: scale(0.97);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.task-fluid-card.drag-over {
+  border-color: var(--primary) !important;
+  transform: translateY(-4px) scale(1.01);
+}
+
+.task-fluid-card.is-resizing {
+  transition: none !important;
+  z-index: 40;
+  box-shadow: 0 24px 54px -10px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Free-form Corner Resize Handle */
+.fluid-resize-handle-se {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  cursor: nwse-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.35;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 20;
+}
+
+.task-fluid-card:hover .fluid-resize-handle-se {
+  opacity: 0.9;
+}
+.fluid-resize-handle-se:hover {
+  transform: scale(1.25);
+  opacity: 1;
+  color: var(--primary);
+}
+
+/* Subtle, flat near-black atmospheric tints (no gradients, no neon LEDs) */
+.card-color-neutral { background: #0d0f15 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; }
+.card-color-blue    { background: #0b0e18 !important; border: 1px solid rgba(255, 255, 255, 0.11) !important; }
+.card-color-purple  { background: #110c18 !important; border: 1px solid rgba(255, 255, 255, 0.11) !important; }
+.card-color-emerald { background: #0b110e !important; border: 1px solid rgba(255, 255, 255, 0.11) !important; }
+.card-color-amber   { background: #12100a !important; border: 1px solid rgba(255, 255, 255, 0.11) !important; }
+.card-color-rose    { background: #130c0f !important; border: 1px solid rgba(255, 255, 255, 0.11) !important; }
+.card-color-sky     { background: #0a0f16 !important; border: 1px solid rgba(255, 255, 255, 0.11) !important; }
+
+/* Light Mode Flat Task Cards */
+body.theme-light .card-color-neutral { background: #ffffff !important; border: 1px solid rgba(0, 0, 0, 0.1) !important; }
+body.theme-light .card-color-blue    { background: #f8fafc !important; border: 1px solid rgba(0, 0, 0, 0.1) !important; }
+body.theme-light .card-color-purple  { background: #faf8fd !important; border: 1px solid rgba(0, 0, 0, 0.1) !important; }
+body.theme-light .card-color-emerald { background: #f7faf8 !important; border: 1px solid rgba(0, 0, 0, 0.1) !important; }
+body.theme-light .card-color-amber   { background: #fdfcf7 !important; border: 1px solid rgba(0, 0, 0, 0.1) !important; }
+body.theme-light .card-color-rose    { background: #fdf7f8 !important; border: 1px solid rgba(0, 0, 0, 0.1) !important; }
+body.theme-light .card-color-sky     { background: #f7fbfd !important; border: 1px solid rgba(0, 0, 0, 0.1) !important; }
+
+/* ==========================================================================
+   CALENDAR (Logaritmik Yakınlaşma & Diğer Günlerin Yumuşak Küçülmesi)
+   ========================================================================== */
+.calendar-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.65rem;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.calendar-day-cell {
+  border-radius: 20px;
+  min-height: 84px;
+  padding: 0.65rem;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid var(--card-border);
+  background: rgba(255, 255, 255, 0.02);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, border-color 0.2s;
+  transform: translate3d(0, 0, 0);
+}
+
+.calendar-day-cell:hover {
+  transform: scale(1.02);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.05);
+}
+body.theme-light .calendar-day-cell:hover {
+  border-color: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Logarithmic focal scaling when a day is zoomed */
+.calendar-has-zoomed-day .calendar-day-cell:not(.calendar-zoomed-day) {
+  transform: scale(0.88) !important;
+  opacity: 0.35 !important;
+  filter: blur(0.4px);
+  pointer-events: auto;
+}
+
+.calendar-zoomed-day {
+  grid-column: span 3;
+  grid-row: span 2;
+  min-height: 220px;
+  border-radius: 28px;
+  padding: 1.15rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border: 1.5px solid var(--primary);
+  box-shadow: 0 24px 56px -12px rgba(0, 0, 0, 0.75), var(--liquid-glass-shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  animation: calendarZoomIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 30;
+  transform: scale(1.02) !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+@keyframes calendarZoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+.calendar-mini-task-card {
+  padding: 0.5rem 0.75rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 11px;
+}
+
+/* ==========================================================================
+   MARKETPLACE (Tasarımla Uyumlu Koyu Liquid Glass Kartlar — Beyaz Değil)
+   ========================================================================== */
+.shop-product-card {
+  background: rgba(18, 22, 32, 0.55) !important;
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  color: var(--text-main) !important;
+  border-radius: 24px;
+  padding: 1.15rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: var(--liquid-glass-shadow);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.2s;
+  transform: translate3d(0, 0, 0);
+}
+.shop-product-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 42px -10px rgba(0, 0, 0, 0.7);
+}
+
+body.theme-light .shop-product-card {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.shop-icon-box {
+  width: 100%;
+  height: 5.5rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.65rem;
+}
+body.theme-light .shop-icon-box {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+/* Purchase Celebration Showcase */
+.purchase-showcase-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 130;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.purchase-showcase-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.purchase-showcase-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(36px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  border-radius: 36px;
+  padding: 2.25rem;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.75), var(--liquid-glass-shadow);
+  transform: scale(0.92);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.purchase-showcase-overlay.active .purchase-showcase-card {
+  transform: scale(1);
+}
+
+/* ==========================================================================
+   SANAL KÜTÜPHANE (Modern Tipografi Saat, Çembersiz, Modüler Eklentiler & Arkadaşlar)
+   ========================================================================== */
+.fullscreen-library {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.75rem;
+  transition: all 0.4s ease;
+}
+
+.fullscreen-library-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(8px);
+  z-index: 1;
+}
+
+.library-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* Modern Typography Clock (No heavy circle/panel, pure typographic elegance) */
+.library-clean-clock {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 5.5rem;
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: #ffffff;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.75);
+}
+
+/* Pre-Study Protocol Card */
+.pre-study-card {
+  max-width: 480px;
+  width: 100%;
+  border-radius: 36px;
+  padding: 2.5rem;
+  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.8), var(--liquid-glass-shadow);
+}
+
+/* Study Room Friend Vector Desks */
+.study-friend-desk {
+  padding: 0.85rem 1.25rem;
+  border-radius: 24px;
+  background: rgba(15, 18, 26, 0.65);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: var(--liquid-glass-shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  transition: transform 0.2s ease;
+}
+.study-friend-desk:hover {
+  transform: translateY(-2px);
+}
+
+.status-pulse-green {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  animation: pulseGreen 2s infinite;
+}
+
+@keyframes pulseGreen {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+.status-pulse-orange {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 0 10px #f59e0b;
+}
+
+.status-pulse-idle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #64748b;
+}
+
+/* Dedicated Library Music Drawer */
+.library-internal-drawer {
+  position: absolute;
+  bottom: 5.5rem;
+  left: 2rem;
+  width: 320px;
+  border-radius: 28px;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(15px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.library-internal-drawer.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   MINI PLAYER & FLOATING WIDGETS
+   ========================================================================== */
+.universal-mini-player {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 55;
+  background: var(--glass-bg);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+  box-shadow: var(--liquid-glass-shadow);
+  padding: 0.45rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.floating-ai-btn {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  z-index: 55;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: var(--liquid-glass-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+.floating-ai-btn:hover {
+  transform: scale(1.08);
+}
+
+.ai-drawer {
+  position: fixed;
+  bottom: 4.75rem;
+  left: 1.25rem;
+  width: 380px;
+  max-width: 90vw;
+  height: 520px;
+  border-radius: 32px;
+  z-index: 56;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(15px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ai-drawer.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   FORM CONTROLS & INPUTS
+   ========================================================================== */
+.glass-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
+  border-radius: 16px;
+  padding: 0.6rem 0.9rem;
+  outline: none;
+  font-size: 12px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.glass-input:focus {
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+body.theme-light .glass-input {
+  background: rgba(0, 0, 0, 0.03);
+  color: #0f172a;
+  border-color: rgba(0, 0, 0, 0.12);
+}
+body.theme-light .glass-input:focus {
+  background: #ffffff;
+  border-color: var(--primary);
+}
+
+/* Modal Backdrops */
+.modal-backdrop {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.modal-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-backdrop.active .modal-content {
+  transform: scale(1);
+}
+.modal-content {
+  transform: scale(0.96);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: var(--panel-radius);
+}
+
+/* Danger Panel */
+.danger-panel {
+  border-radius: var(--panel-radius);
+  background: rgba(244, 63, 94, 0.06);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+body.theme-light .danger-panel {
+  background: rgba(244, 63, 94, 0.04);
+  border-color: rgba(244, 63, 94, 0.25);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+}
+body.theme-light ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
